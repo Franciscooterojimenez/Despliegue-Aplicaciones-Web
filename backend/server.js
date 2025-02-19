@@ -51,7 +51,7 @@ app.delete('/tareas/:id', async (req, res) => {
 });
 
 // Conectar a MongoDB y arrancar el servidor
-const mongoURI = 'mongodb+srv://<Paco>:<e7rAWxyZpmdhvYbB>@clustertareas.4bx6c.mongodb.net/?retryWrites=true&w=majority&appName=ClusterTareas';
+const mongoURI = 'mongodb+srv://<Paco>:<Tgi188WaHf24vsv8>@clustertareas.4bx6c.mongodb.net/?retryWrites=true&w=majority&appName=ClusterTareas';
 
 mongoose.connect(mongoURI)
   .then(() => console.log('Conectado a MongoDB'))
