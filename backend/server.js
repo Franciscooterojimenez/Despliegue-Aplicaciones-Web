@@ -1,20 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Tarea = require('./models/Tarea');  // Importar el modelo de tarea
+const cors = require('cors');  // Importa cors
+const Tarea = require('./models/Tarea');
 const app = express();
+
+// Habilitar CORS
+app.use(cors());  // Esto permitirá peticiones de cualquier origen
+
+// O si quieres restringirlo a tu frontend en localhost (por seguridad):
+// app.use(cors({
+//   origin: 'http://localhost:3000'
+// }));
 
 app.use(express.json());
 
-// Conexión a MongoDB
-const mongoURI = 'mongodb+srv://<Paco>:<e7rAWxyZpmdhvYbB>@cluster0.mongodb.net/tareasDB?retryWrites=true&w=majority';
-
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Conectado a MongoDB'))
-  .catch((error) => console.error('Error al conectar a MongoDB:', error));
-
 // Rutas de la API
-
-// Obtener todas las tareas
 app.get('/tareas', async (req, res) => {
   try {
     const tareas = await Tarea.find();
@@ -24,7 +24,6 @@ app.get('/tareas', async (req, res) => {
   }
 });
 
-// Crear nueva tarea
 app.post('/tareas', async (req, res) => {
   const { titulo, descripcion } = req.body;
   const nuevaTarea = new Tarea({ titulo, descripcion });
@@ -37,7 +36,6 @@ app.post('/tareas', async (req, res) => {
   }
 });
 
-// Eliminar tarea por ID
 app.delete('/tareas/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -52,7 +50,12 @@ app.delete('/tareas/:id', async (req, res) => {
   }
 });
 
-// Configuración del puerto y servidor
+// Conectar a MongoDB y arrancar el servidor
+const mongoURI = 'mongodb+srv://<Paco>:<e7rAWxyZpmdhvYbB>@cluster0.mongodb.net/tareasDB?retryWrites=true&w=majority';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch((error) => console.error('Error al conectar a MongoDB:', error));
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor en puerto ${PORT}`);
