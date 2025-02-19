@@ -52,10 +52,11 @@ app.delete('/tareas/:id', async (req, res) => {
 
 // Conectar a MongoDB y arrancar el servidor
 const mongoURI = 'mongodb+srv://<Paco>:<e7rAWxyZpmdhvYbB>@clusterTareas.mongodb.net/tareasDB?retryWrites=true&w=majority';
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoURI)
   .then(() => console.log('Conectado a MongoDB'))
-  .catch((error) => console.error('Error al conectar a MongoDB:', error));
-
+  .catch(err => {
+    console.error('Error al conectar a MongoDB:', err);
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Servidor en puerto ${PORT}`);
