@@ -1,12 +1,25 @@
+require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
-const tareasRoutes = require('./routes/tareas');
+const cors = require('cors');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(cors());
 
-app.use('/tareas', tareasRoutes);
+let tareas = [];
 
-app.listen(3000, () => {
-    console.log('Servidor corriendo en http://localhost:3000');
+app.get('/tareas', (req, res) => res.json(tareas));
+
+app.post('/tareas', (req, res) => {
+    const tarea = { id: tareas.length + 1, ...req.body };
+    tareas.push(tarea);
+    res.status(201).json(tarea);
 });
+
+app.delete('/tareas/:id', (req, res) => {
+    tareas = tareas.filter(t => t.id !== parseInt(req.params.id));
+    res.status(204).send();
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
